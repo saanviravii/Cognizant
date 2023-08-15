@@ -1,6 +1,6 @@
-##index.js  
+##Index.js  
 supermarket/admin dashboard  
-#vendor.js  
+#Vendor.js  
 vendor/user dashboard  
-#login.js, signup.js  
+#Login.js, signup.js  
 login and sign up page

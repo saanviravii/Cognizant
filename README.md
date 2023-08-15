@@ -1,6 +1,8 @@
 ## Reference
 check only these pages
 ### index.js
+home page  
+### admin.js
 supermarket dashboard page
 
 ### vendor.js

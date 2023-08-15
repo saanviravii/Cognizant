@@ -1,4 +1,4 @@
-#index.js  
+##index.js  
 supermarket/admin dashboard  
 #vendor.js  
 vendor/user dashboard  

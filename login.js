@@ -58,7 +58,7 @@ function Login({ user }) {
             localStorage.setItem("jwt", data.jwt);
 
             if (account === "admin") {
-                router.push("/");
+                router.push("/admin");
             } else if (account === "user") {
                 router.push("/vendor");
             }

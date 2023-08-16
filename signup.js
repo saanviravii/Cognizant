@@ -15,7 +15,13 @@ function Signup({ user }) {
 
     useEffect(() => {
         if (localStorage.getItem("jwt")) {
-            router.push("/");
+            if (account === "admin") {
+                router.push("/admin");
+            } else if (account === "user") {
+                router.push("/vendor");
+            }
+            else
+            {router.push("/");}
         }
     }, []);
 
@@ -61,7 +67,7 @@ function Signup({ user }) {
             localStorage.setItem("jwt", data.jwt);
 
             if (account === "admin") {
-                router.push("/");
+                router.push("/admin");
             } else if (account === "user") {
                 router.push("/vendor");
             }

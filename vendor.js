@@ -1,131 +1,74 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import { useState } from 'react';
+import { FaEdit, FaList, FaStoreAlt } from 'react-icons/fa';
 
 export default function Home() {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
-  const [productName, setProductName] = useState('');
-  const [productQty, setProductQty] = useState('');
-  const [productPrice, setProductPrice] = useState('');
+  const [predictedProducts, setPredictedProducts] = useState([
+    'Product A',
+    'Product B',
+    'Product C',
+  ]);
+  const [nearestVendors, setNearestVendors] = useState([
+    { name: 'Vendor A', distance: '2 miles' },
+    { name: 'Vendor B', distance: '3 miles' },
+    { name: 'Vendor C', distance: '5 miles' },
+  ]);
+  const [locallySourcedProducts, setLocallySourcedProducts] = useState([
+    { name: 'Organic Mangoes', price: '₹200/kg', description: 'Fresh and juicy mangoes from local farms.' },
+    { name: 'Basmati Rice', price: '₹100/kg', description: 'Aromatic long-grain basmati rice.' },
+    // Add more locally sourced products...
+  ]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // Create an authorization token if needed
-  
-    const authToken = localStorage.getItem("jwt"); // Replace with your actual authorization token
-
-    const formData = new FormData();
-    formData.append('product-name', productName);
-    formData.append('product-qty', productQty);
-    formData.append('product-price', productPrice);
-
-    try {
-      const response = await fetch('http://localhost:1337/api/products', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Product added successfully
-        console.log('Product added successfully');
-      } else {
-        // Handle error
-        console.error('Error adding product');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-  };
   return (
     <div className="bg-gray-100 min-h-screen py-10">
       <div className="bg-white p-6 shadow-md">
-        <h1 className="text-3xl font-bold">Vendor Dashboard</h1>
+        <h1 className="text-3xl font-bold flex items-center">
+          <FaStoreAlt className="mr-2 text-blue-500" />
+          Vendor Dashboard
+        </h1>
         <p className="text-gray-500 mt-2">Update Product Details & View Transactions</p>
       </div>
 
-      <div className="container mx-auto mt-6 p-6">
+      <div className="container mx-auto mt-6 p-6 grid gap-6 grid-cols-1 sm:grid-cols-2">
         <div className="bg-white p-6 shadow-md">
           <h2 className="text-xl font-semibold mb-4">Product Details</h2>
-          {showUpdateForm ? (
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="product-name" className="block text-gray-600 font-medium">Product Name</label>
-                <input
-                  type="text"
-                  id="product-name"
-                  name="product-name"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-indigo-300"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="product-qty" className="block text-gray-600 font-medium">Quantity</label>
-                <input
-                  type="number"
-                  id="product-qty"
-                  name="product-qty"
-                  value={productQty}
-                  onChange={(e) => setProductQty(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-indigo-300"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="product-price" className="block text-gray-600 font-medium">Price</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="product-price"
-                  name="product-price"
-                  value={productPrice}
-                  onChange={(e) => setProductPrice(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-indigo-300"
-                  required
-                />
-              </div>
-              {/* Add more input fields for product details */}
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-              >
-                Update Product Details
-              </button>
-            </form>
-          ) : (
-            <button
-              onClick={() => setShowUpdateForm(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-            >
-              Update Product Details
-            </button>
-          )}
+          <ul className="list-disc pl-6">
+            {locallySourcedProducts.map((product, index) => (
+              <li key={index} className="mb-4">
+                <h3 className="text-lg font-semibold">{product.name}</h3>
+                <p className="text-gray-600">{product.description}</p>
+                <p className="text-blue-600">{product.price}</p>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="mt-6 bg-white p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Transaction Data</h2>
-          {/* Display transaction data here */}
+        <div className="bg-white p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Predicted Products</h2>
+          <ul className="list-disc pl-6">
+            {predictedProducts.map((product, index) => (
+              <li key={index} className="flex items-center">
+                <FaList className="mr-2 text-blue-500" />
+                {product}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="bg-white p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Nearest Vendors</h2>
+          <ul className="list-disc pl-6">
+            {nearestVendors.map((vendor, index) => (
+              <li key={index} className="flex items-center">
+                <FaEdit className="mr-2 text-blue-500" />
+                {vendor.name} - {vendor.distance}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    </div >
-
+    </div>
   )
 }
-// export async function getServerSideProps(context) {
-//   let res = await fetch(`http://localhost:3000/api/ai`, {
-//     method: "GET",
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-//   });
-//   let d = await res.json();
-//   // Assuming the JSON content is stored in the 'data' variable
-//   const productsArray = d[0]?.candidates[0]?.content; // Access the JSON content
 
-//   return {
-//     props: { products: productsArray }, // will be passed to the page component as props
-//   };
-// }
